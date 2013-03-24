@@ -36,13 +36,14 @@ if __name__ == "__main__":
   if len(sys.argv) != 2:
     sys.exit("ERROR: Provide brainwallet string as parameter\n./brainwallet-check.py 'Satoshi Nakamoto'")
   privatekey = (int(hashlib.sha256(sys.argv[1]).hexdigest(),16))
+  privatekeysha = (hashlib.sha256(sys.argv[1])).hexdigest()
   bcaddy = addy(privatekey)
   word = str(sys.argv[1])
   firstseen = os.popen("GET http://blockchain.info/q/addressfirstseen/" + str(bcaddy)).read()
   amount = os.popen("GET http://blockchain.info/q/addressbalance/" + str(bcaddy)).read()
   print "-----------------------------------------------------"
   print "brainwallet string: " + word
-  print "private key: " + str(privatekey)
+  print "private key: " + str(privatekeysha)
   print "bitcoin address: " + str(bcaddy)
   if str(firstseen) == "null":
     print "[ADDRESS ISN'T IN USE ACCORDING TO BLOCKCHAIN.INFO]"

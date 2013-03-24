@@ -32,7 +32,7 @@ Basic run with a valid address, but nothing in the wallet:
     root@techsmog:~/brainwallet-check# ./brainwallet-check.py  'Satoshi Nakamoto'
 	-----------------------------------------------------
 	brainwallet string: Satoshi Nakamoto
-	private key: 72759466100064397073952777052424474334519735946222029294952053344302920927294
+	private key: a0dc65ffca799873cbea0ac274015b9526505daaaed385155425f7337704883e
 	bitcoin address: 1JryTePceSiWVpoNBU8SbwiT7J4ghzijzW
 	First seen according to blockchain.info: 1322885134
 	Wallet amount: 0
@@ -43,7 +43,7 @@ Basic run with an address that hasn't been used yet:
 	root@techsmog:~/brainwallet-check# ./brainwallet-check.py 'gimme da loot'
 	-----------------------------------------------------
 	brainwallet string: gimme da loot
-	private key: 112095600548568711100952985931940355672316008458252242110023944239157495839427
+	private key: f7d3dc8e32903ea6052ad28c347d7e0f3139150676b0a0d8f59d37699249bac3
 	bitcoin address: 1AYmvzSbZrdhV5S39S2Ce1u3xBqAhJUYaG
 	[ADDRESS ISN'T IN USE ACCORDING TO BLOCKCHAIN.INFO]
 	-----------------------------------------------------
