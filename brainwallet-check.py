@@ -41,7 +41,7 @@ if __name__ == "__main__":
   amount = os.popen("GET http://blockchain.info/q/addressbalance/" + str(pk)).read()
   print "-----------------------------------------------------"
   print "brainwallet string: " + word
-  print "private key: " + str(pk)
+  print "bitcoin address: " + str(pk)
   if str(firstseen) == "null":
     print "[ADDRESS ISN'T IN USE ACCORDING TO BLOCKCHAIN.INFO]"
   else:
