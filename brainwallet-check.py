@@ -1,15 +1,15 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # Brainwallet Check
 # Takes in string as an argument, generates private key and address, then checks blockchain.info to see if it is in use
-# Most code taken from https://bitcointalk.org/index.php?topic=84238.0 - thank you JeromeS! 
-# You need libpcre3-dev for the GET request to work to blockchain.info (apt get libpcre3-dev)
+# Most code taken from https://bitcointalk.org/index.php?topic=84238.0 - thank you JeromeS!
+# Updated for Python 3 compatibility
 # - Josh Gilmour
 
-import os
-import sys, getopt
+import sys
 import ecdsa
-import urllib2
+import urllib.request
+import urllib.error
 import binascii, hashlib
 
 secp256k1curve=ecdsa.ellipticcurve.CurveFp(115792089237316195423570985008687907853269984665640564039457584007908834671663,0,7)
@@ -26,7 +26,7 @@ def addy(pk):
  pubkey6=pubkey3+pubkey5[:8]
  pubnum=int(pubkey6,16)
  pubnumlist=[]
- while pubnum!=0: pubnumlist.append(pubnum%58); pubnum/=58
+ while pubnum!=0: pubnumlist.append(pubnum%58); pubnum//=58
  address=''
  for l in ['123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'[x] for x in pubnumlist]:
   address=l+address
@@ -35,19 +35,25 @@ def addy(pk):
 if __name__ == "__main__":
   if len(sys.argv) != 2:
     sys.exit("ERROR: Provide brainwallet string as parameter\n./brainwallet-check.py 'Satoshi Nakamoto'")
-  privatekey = (int(hashlib.sha256(sys.argv[1]).hexdigest(),16))
-  privatekeysha = (hashlib.sha256(sys.argv[1])).hexdigest()
+  passphrase = sys.argv[1].encode('utf-8')
+  privatekey = int(hashlib.sha256(passphrase).hexdigest(), 16)
+  privatekeysha = hashlib.sha256(passphrase).hexdigest()
   bcaddy = addy(privatekey)
-  word = str(sys.argv[1])
-  firstseen = os.popen("GET http://blockchain.info/q/addressfirstseen/" + str(bcaddy)).read()
-  amount = os.popen("GET http://blockchain.info/q/addressbalance/" + str(bcaddy)).read()
-  print "-----------------------------------------------------"
-  print "brainwallet string: " + word
-  print "private key: " + str(privatekeysha)
-  print "bitcoin address: " + str(bcaddy)
-  if str(firstseen) == "null":
-    print "[ADDRESS ISN'T IN USE ACCORDING TO BLOCKCHAIN.INFO]"
+  word = sys.argv[1]
+
+  try:
+    firstseen = urllib.request.urlopen("https://blockchain.info/q/addressfirstseen/" + bcaddy).read().decode('utf-8')
+    amount = urllib.request.urlopen("https://blockchain.info/q/addressbalance/" + bcaddy).read().decode('utf-8')
+  except urllib.error.URLError as e:
+    sys.exit(f"ERROR: Could not connect to blockchain.info API: {e}")
+
+  print("-----------------------------------------------------")
+  print("brainwallet string: " + word)
+  print("private key: " + privatekeysha)
+  print("bitcoin address: " + bcaddy)
+  if firstseen == "null":
+    print("[ADDRESS ISN'T IN USE ACCORDING TO BLOCKCHAIN.INFO]")
   else:
-    print "First seen according to blockchain.info: " + firstseen
-    print "Wallet amount: " + amount
-  print "-----------------------------------------------------"
+    print("First seen according to blockchain.info: " + firstseen)
+    print("Wallet amount: " + amount)
+  print("-----------------------------------------------------")

@@ -10,15 +10,19 @@ More information about what a brainwallet is can be found here: [https://en.bitc
 The script could easily be modified to read from a file, which could contain multiple lines of passphrases, however blockchain.info will temp-ban you if API requests are more than one every 10 seconds. 
 
 ## Requirements
-* **Python**
-* **Python Modules**: os, sys, getopt, ecdsa, urllib2, binascii, hashlib
-* **libpcre3-dev** (for the GET system command)
+* **Python 3**
+* **Python Modules**: sys, ecdsa, urllib.request, urllib.error, binascii, hashlib
+
+Install the required ecdsa module:
+```bash
+pip3 install ecdsa
+```
 
 ## Usage
 
 Usage of **Brainwallet Check** is pretty simple, just call the python script and pass it along the passphrase:
 
-	python brainwallet-check.py 'passphrase to use' 
+	python3 brainwallet-check.py 'passphrase to use' 
 
 ## Examples
 Basic run with no parameters:
@@ -58,6 +62,18 @@ A vast amount of this code is from **JeromeS** on bitcointalk.org forums. Specif
 * **Site**: [http://www.techsmog.com](http://www.techsmog.com)
 * **GitHub**: [http://www.github.com/jgilmour](http://www.github.com/jgilmour)
 
-Feel free to fork! 
+Feel free to fork!
 
-March 23, 2013 11:16 PM
+## Changelog
+
+### December 2025
+* Updated to Python 3 compatibility
+* Replaced `urllib2` with `urllib.request` and `urllib.error`
+* Removed dependency on `libpcre3-dev` and external `GET` command
+* Changed API calls to use HTTPS instead of HTTP
+* Fixed integer division for Python 3 (`/=` to `//=`)
+* Added proper string encoding for hashlib operations
+* Added error handling for API connection failures
+
+### March 23, 2013
+* Initial release
